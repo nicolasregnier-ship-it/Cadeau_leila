@@ -1,0 +1,62 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joyeux Noël Leïla</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI;background:radial-gradient(circle at top,#1e293b,#020617);color:white;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.container{text-align:center;max-width:520px;width:100%}
+.envelope{margin:40px auto;width:320px;height:200px;background:#f5efe6;border-radius:16px;cursor:pointer;box-shadow:0 20px 50px rgba(0,0,0,.45);position:relative;overflow:hidden}
+.envelope:before{content:"";position:absolute;inset:0;background:#ede3d3;clip-path:polygon(0 0,100% 0,50% 60%);transform-origin:top;transition:transform 1s ease}
+.envelope.open:before{transform:rotateX(180deg)}
+.label{position:absolute;bottom:24px;width:100%;text-align:center;font-size:26px;font-weight:800;color:#0f172a}
+.heart{color:#e11d48}
+.card{display:none;margin-top:20px;background:white;border-radius:16px;overflow:hidden}
+.card.show{display:block}
+iframe{width:100%;height:520px;border:0;filter:blur(10px)}
+.note{color:#334155;font-size:14px;padding:10px}
+canvas{position:fixed;inset:0;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="container">
+<h1>🎄 Joyeux Noël Leïla ❤️</h1>
+<p>Clique sur l’enveloppe pour découvrir ton cadeau</p>
+<div class="envelope" id="env">
+  <div class="label">Joyeux Noël Leïla <span class="heart">❤</span></div>
+</div>
+<div class="card" id="card">
+  <iframe src="assets/bon_caliceo.pdf"></iframe>
+  <div class="note">QR code volontairement flouté</div>
+</div>
+</div>
+<audio id="music" preload="auto">
+<source src="https://cdn.pixabay.com/audio/2022/12/20/audio_9c1f1b6d1a.mp3" type="audio/mpeg">
+</audio>
+<script>
+const env=document.getElementById("env");
+const card=document.getElementById("card");
+const music=document.getElementById("music");
+env.addEventListener("click",()=>{
+  env.classList.add("open");
+  card.classList.add("show");
+  music.play().catch(()=>{});
+  confetti();
+});
+function confetti(){
+  const c=document.getElementById("confetti");
+  const x=c.getContext("2d");
+  c.width=innerWidth;c.height=innerHeight;
+  let p=[...Array(140)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*6+4,c:`hsl(${Math.random()*360},80%,60%)`}));
+  (function a(){
+    x.clearRect(0,0,c.width,c.height);
+    p.forEach(o=>{x.beginPath();x.fillStyle=o.c;x.arc(o.x,o.y+=3,o.r,0,6.28);x.fill();if(o.y>c.height)o.y=0});
+    requestAnimationFrame(a);
+  })();
+}
+</script>
+</body>
+</html>
